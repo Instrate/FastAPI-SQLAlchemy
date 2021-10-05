@@ -16,15 +16,15 @@ def get_db():
     finally:
         db.close()
 
+
 class Request():
     def table_drop(session: sessionmaker, table_name: str):
         if session and table_name:
             req = text("DROP TABLE IF EXISTS %s" % table_name)
             session.execute(req)
-    
+
     def table_select(session: sessionmaker, table_name: str):
         if session and table_name:
             req = text("SELECT * FROM %s" % table_name)
             for row in session.execute(req):
                 print(row)
-            
