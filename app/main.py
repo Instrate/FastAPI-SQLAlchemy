@@ -1,16 +1,16 @@
-from fastapi import FastAPI
-import asyncio
+from inspect import getmembers
 
-from routers.router import ROUTER as router 
+from fastapi import FastAPI
+
+from routers import routers
+
+from database import Base, engine
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
-app.include_router(router)
-#app.include_router()
 
-async def main():
-    await asyncio.sleep(0)
-    
-    
-if __name__ == '__main__':
-    asyncio.run(main())
+
+for router in routers:
+    app.include_router(router)

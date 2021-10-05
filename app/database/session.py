@@ -1,8 +1,7 @@
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
-from database.engine import engine
-
+from .main_engine import engine
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -14,7 +13,6 @@ def get_db():
         print(f"Raised: {ex}")
     finally:
         db.close()
-
 
 class Request():
     def table_drop(session: sessionmaker, table_name: str):

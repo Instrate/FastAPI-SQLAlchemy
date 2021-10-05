@@ -1,7 +1,7 @@
 from sqlalchemy import Table, Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
 
-from database.engine import Base
+from database import Base
 
 import uuid
 
@@ -12,7 +12,7 @@ class User(Base):
     user_id = Column(String, default=lambda: str(uuid.uuid4()), nullable=True)
     username = Column(String(30), unique=True, index=True)
     email = Column(String(30), unique=True, index=True)
-    full_name = Column(String)
+    full_name = Column(String, default='newbuy')
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
     
