@@ -1,18 +1,34 @@
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
+from fastapi import FastAPI, Request, Response
+
 from .main_engine import engine
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-def get_db():
-    db = SessionLocal()
+app = FastAPI()
+
+@app.middleware("http")
+async def db_session_middleware(request: Request, call_next):
+    response = Response("Internal Server Error", status_code=500)
     try:
-        yield db
-    except Exception as ex:
-        print(f"Raised: {ex}")
+        request.state.db = SessionLocal()
+        response = await call_next(request)
     finally:
-        db.close()
+        request.state.db.close()
+    return response
+
+def get_db(request: Request):
+    return request.state.db
+    # db = SessionLocal()
+    # try:
+    #     yield db
+    # except Exception as ex:
+    #     print(f"Raised: {ex}")
+    # finally:
+    #     db.close()
+    # return db
 
 class Request():
     def table_drop(session: sessionmaker, table_name: str):
