@@ -11,7 +11,9 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
-    except:
+    except Exception as ex:
+        print(f"Raised: {ex}")
+    finally:
         db.close()
 
 class Request():
