@@ -1,7 +1,7 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
-from item import Item
+from ..item import Item
 
 class UserBase(BaseModel):
     username: str

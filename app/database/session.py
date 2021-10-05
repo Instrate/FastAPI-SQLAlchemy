@@ -1,11 +1,10 @@
 from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
-from engine import engine
+from database.engine import engine
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
 
 def get_db():
     db = SessionLocal()

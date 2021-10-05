@@ -1,25 +1,14 @@
 from typing import List
 from fastapi import Path
 from fastapi.param_functions import Depends
-from app.database.session import SessionLocal, get_db
+from database.session import SessionLocal, get_db
 
 import crud
 
-from routers.router import router
+from routers.router import ROUTER as router 
 
-from database.schemas import item
+from schemas import item
 
-# @router.get("/users/", tags=["users"])
-# async def read_users():
-#     return [{"username": "Rick"}, {"username": "Morty"}]
-
-# @router.get("/users/me", tags=["users"])
-# async def read_user_me():
-#     return {"username": "fakecurrentuser"}
-
-# @router.get("/users/{username}", tags=["users"])
-# async def read_user(username:str = Path(...)):
-#     return {"username": username}
 
 @router.post("users/{user_id}/items/", response_model=item.Item)
 def create_item_for_user(user_id:int, item: item.ItemCreate, db: SessionLocal = Depends(get_db)):
