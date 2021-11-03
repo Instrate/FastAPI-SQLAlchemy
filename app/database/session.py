@@ -2,12 +2,28 @@ from sqlalchemy import text
 from sqlalchemy.orm import sessionmaker
 
 from fastapi import FastAPI, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
 
 from .main_engine import engine
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 app = FastAPI()
+
+# origins = [
+#     "http://localhost.tiangolo.com",
+#     "https://localhost.tiangolo.com",
+#     "http://localhost",
+#     "ws://localhost",
+#     "http://localhost:8080",
+#     "ws://localhost:4200",
+#     "http://localhost:4200"
+#     ]
+
+app.add_middleware(
+    CORSMiddleware,
+    **{"allow_origins": ["*"], "allow_methods": ["*"], "allow_headers": ["*"], "allow_credentials": True}
+)
 
 @app.middleware("http")
 async def db_session_middleware(request: Request, call_next):
@@ -21,14 +37,6 @@ async def db_session_middleware(request: Request, call_next):
 
 def get_db(request: Request):
     return request.state.db
-    # db = SessionLocal()
-    # try:
-    #     yield db
-    # except Exception as ex:
-    #     print(f"Raised: {ex}")
-    # finally:
-    #     db.close()
-    # return db
 
 class Request():
     def table_drop(session: sessionmaker, table_name: str):
